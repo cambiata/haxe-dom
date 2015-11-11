@@ -1,0 +1,11 @@
+-lib hxdom
+-cp src
+-main Client
+-js bin/client.js
+
+--next
+
+-lib hxdom
+-cp src
+-main Server
+-neko bin/index.n
