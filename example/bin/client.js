@@ -290,24 +290,42 @@ MyCustomList.prototype = $extend(hxdom_EDiv.prototype,{
 		while(_g < _g1.length) {
 			var item = _g1[_g];
 			++_g;
-			hxdom_DomTools.append(this.list,hxdom_DomTools.setText(new hxdom_EListItem(),item.label + " " + item.nr));
+			hxdom_DomTools.append(this.list,new MyCustomListItem(item));
 		}
 	}
 	,onBtnAddClick: function(e) {
-		this.items.push({ label : "User item", nr : Math.round(Math.random() * 1000)});
+		this.items.push({ text : "Add user item", color : 6985554});
 		this.displayItems();
 	}
 	,init: function() {
-		var _g = this;
-		window.setTimeout(function(e) {
-			_g.items.push({ label : "Client item", nr : 999});
-			_g.displayItems();
-		},1500);
+		this.items.push({ text : "Added on client", color : 6046837});
+		this.displayItems();
 	}
 	,__hxdomBoot: function() {
 		this.init();
 	}
 	,__class__: MyCustomList
+});
+var hxdom_EListItem = function() {
+	hxdom_VirtualElement.call(this,hxdom_VirtualNode.buildElement(HTMLLIElement,"LI"));
+};
+$hxClasses["hxdom.EListItem"] = hxdom_EListItem;
+hxdom_EListItem.__name__ = true;
+hxdom_EListItem.__super__ = hxdom_VirtualElement;
+hxdom_EListItem.prototype = $extend(hxdom_VirtualElement.prototype,{
+	__class__: hxdom_EListItem
+});
+var MyCustomListItem = function(item) {
+	hxdom_EListItem.call(this);
+	var hex = "#" + StringTools.lpad(StringTools.hex(item.color),"0",6);
+	hxdom_DomTools.setAttr(this,"style","background-color: " + hex + "; padding: 9px; margin: 4px; border-radius: 4px; color: white;");
+	hxdom_DomTools.setText(this,item.text);
+};
+$hxClasses["MyCustomListItem"] = MyCustomListItem;
+MyCustomListItem.__name__ = true;
+MyCustomListItem.__super__ = hxdom_EListItem;
+MyCustomListItem.prototype = $extend(hxdom_EListItem.prototype,{
+	__class__: MyCustomListItem
 });
 var Reflect = function() { };
 $hxClasses["Reflect"] = Reflect;
@@ -364,6 +382,21 @@ $hxClasses["StringTools"] = StringTools;
 StringTools.__name__ = true;
 StringTools.startsWith = function(s,start) {
 	return s.length >= start.length && HxOverrides.substr(s,0,start.length) == start;
+};
+StringTools.lpad = function(s,c,l) {
+	if(c.length <= 0) return s;
+	while(s.length < l) s = c + s;
+	return s;
+};
+StringTools.hex = function(n,digits) {
+	var s = "";
+	var hexChars = "0123456789ABCDEF";
+	do {
+		s = hexChars.charAt(n & 15) + s;
+		n >>>= 4;
+	} while(n > 0);
+	if(digits != null) while(s.length < digits) s = "0" + s;
+	return s;
 };
 StringTools.fastCodeAt = function(s,index) {
 	return s.charCodeAt(index);
@@ -1412,17 +1445,21 @@ hxdom_EBreak.prototype = $extend(hxdom_VirtualElement.prototype,{
 var hxdom_EButton = function(type) {
 	hxdom_VirtualElement.call(this,hxdom_VirtualNode.buildElement(HTMLButtonElement,"BUTTON"));
 	if(type == null) type = hxdom_ButtonType.Button;
-	switch(type[1]) {
-	case 0:
-		this.node.type = "button";
-		break;
-	case 1:
-		this.node.type = "submit";
-		break;
-	case 2:
-		this.node.type = "reset";
-		break;
-	}
+	hxdom_DomTools.setAttr(this,"type",(function($this) {
+		var $r;
+		switch(type[1]) {
+		case 0:
+			$r = "button";
+			break;
+		case 1:
+			$r = "submit";
+			break;
+		case 2:
+			$r = "reset";
+			break;
+		}
+		return $r;
+	}(this)));
 };
 $hxClasses["hxdom.EButton"] = hxdom_EButton;
 hxdom_EButton.__name__ = true;
@@ -1855,15 +1892,6 @@ hxdom_ELegend.__name__ = true;
 hxdom_ELegend.__super__ = hxdom_VirtualElement;
 hxdom_ELegend.prototype = $extend(hxdom_VirtualElement.prototype,{
 	__class__: hxdom_ELegend
-});
-var hxdom_EListItem = function() {
-	hxdom_VirtualElement.call(this,hxdom_VirtualNode.buildElement(HTMLLIElement,"LI"));
-};
-$hxClasses["hxdom.EListItem"] = hxdom_EListItem;
-hxdom_EListItem.__name__ = true;
-hxdom_EListItem.__super__ = hxdom_VirtualElement;
-hxdom_EListItem.prototype = $extend(hxdom_VirtualElement.prototype,{
-	__class__: hxdom_EListItem
 });
 var hxdom_ELink = function() {
 	hxdom_VirtualElement.call(this,hxdom_VirtualNode.buildElement(HTMLLinkElement,"LINK"));

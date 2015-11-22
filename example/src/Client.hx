@@ -1,4 +1,5 @@
 import hxdom.js.Boot;
+import Components;
 
 class Client {
 	static public function main() {

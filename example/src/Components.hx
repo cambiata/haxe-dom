@@ -2,9 +2,13 @@ import hxdom.Elements;
 import hxdom.js.ClientOnly;
 using hxdom.DomTools;
 
+class Components {}
+
+
+// The Dom Html element wrapping Head and Body 
 class MyIndex extends EHtml {
 	
-	public function new(content:EDiv) {
+	public function new(content:VirtualElement<Dynamic>) {
 		super();
 
 		var head = new EHead();
@@ -28,6 +32,7 @@ class MyIndex extends EHtml {
 
 }
 
+// Component created by a Div containing an Unordered list
 class MyCustomList extends EDiv implements ClientOnly{
 	var items:Array<TestItem>;
 	var list:EUnorderedList;
@@ -44,26 +49,35 @@ class MyCustomList extends EDiv implements ClientOnly{
 	function displayItems() {
 		this.list.setHtml('');
 		for (item in this.items) {
-			this.list.append(new EListItem().setText(item.label + ' ' + item.nr));
+			this.list.append(new MyCustomListItem(item));
 		}
 	}
 
 	function onBtnAddClick(e:hxdom.html.Event) {
-		this.items.push({label:'User item', nr: Math.round(Math.random()*1000)});
+		this.items.push({text:'Add user item', color: 0x6A9752});
 		this.displayItems();
 	}
 
+	// This method is run only clientside!
 	@:client
 	function init() {
-		js.Browser.window.setTimeout(function(e) {
-			this.items.push({label: 'Client item', nr: 999});
+		//js.Browser.window.setTimeout(function(e) {
+			this.items.push({text: 'Added on client', color: 0x5C4475});
 			this.displayItems();
-		}, 1500);
+		//}, 1500);
 	}
 
 } 
 
-typedef TestItem = {
-	label:String,
-	nr: Int,
+// Custom list element
+class MyCustomListItem extends EListItem {
+	public function new(item:TestItem) {
+		super();
+		var hex = '#' + StringTools.lpad(StringTools.hex(item.color), '0', 6);
+		this.setAttr('style', 'background-color: $hex; padding: 9px; margin: 4px; border-radius: 4px; color: white;');
+		this.setText(item.text);
+	}
+
 }
+
+
