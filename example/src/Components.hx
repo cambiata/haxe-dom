@@ -14,6 +14,7 @@ class MyIndex extends EHtml {
 		var head = new EHead();
 		this.append(head);
 		head.append(new EMeta().setAttr('charset', 'utf-8'));
+		// Here's where the compiled js is loaded:
 		head.append(new EScript().setAttr("src", "/client.js").setAttr("defer", true));
 
 		var body = new EBody();
