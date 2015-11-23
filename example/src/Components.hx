@@ -6,6 +6,7 @@ class Components {}
 
 
 // The Dom Html element wrapping Head and Body 
+// Note that the content part is passed into the constructor
 class MyIndex extends EHtml {
 	
 	public function new(content:VirtualElement<Dynamic>) {
