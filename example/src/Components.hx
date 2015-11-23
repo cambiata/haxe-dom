@@ -25,6 +25,7 @@ class MyIndex extends EHtml {
 		header.append(new EHeader2().setText('Isomorphic code with HxDom'));
 		body.append(header);
 
+		// Add the content to the html body
 		body.append(content);
 		
 		var footer = new EFooter();

@@ -18,13 +18,14 @@ class Server {
 		
 		// Create the Index page (actually a dom Html element wrapping Head and Body elements)
 		// and feed it with the content we created above
-		var html = hxdom.HtmlSerializer.run(new MyIndex(content));
+		var myIndexPage = new MyIndex(content);
+		
+		// Make html out of it
+		var html = hxdom.HtmlSerializer.run(myIndexPage);
 		
 		// Spit it out!
 		Sys.println(html);
 		
-		//sys.io.File.saveContent('server.html', html);
-
 	} 
 
 }
